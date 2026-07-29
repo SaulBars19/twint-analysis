@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWINT — Fundamental &amp; Strategic Analysis | CFA Research</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #000000;
+    --card: #000000;
+    --border: #1c1c30;
+    --accent: #fbbf24;
+    --accent2: #4ade80;
+    --red: #f87171;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --sub: #94a3b8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #000000 !important; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .header {
+    background: #000000;
+    border-bottom: 1px solid var(--border);
+    padding: 48px 60px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: transparent;
+    pointer-events: none;
+  }
+  .header-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #fff;
+  }
+  .header h1 span { color: var(--accent); }
+  .header-sub {
+    font-size: 15px;
+    color: var(--sub);
+    margin-top: 10px;
+    font-weight: 300;
+  }
+  .verdict-banner {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    background: #000000;
+    border: 1px solid rgba(251,191,36,0.3);
+    padding: 14px 24px;
+    border-radius: 4px;
+  }
+  .verdict-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .verdict-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+  .verdict-divider { width: 1px; height: 36px; background: var(--border); }
+  .price-box { text-align: center; }
+  .nav {
+    background: #000000;
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 14px 18px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav a:hover { color: var(--text); border-color: var(--border); }
+  .nav a.active { color: var(--accent); border-color: var(--accent); }
+  .main { max-width: 1280px; margin: 0 auto; padding: 40px 60px; background: #000000; }
+  .section { margin-bottom: 56px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+  }
+  .card-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .card-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .card-delta {
+    font-size: 12px;
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .green { color: var(--accent2); }
+  .red { color: var(--red); }
+  .amber { color: var(--accent); }
+  .blue { color: var(--blue); }
+  .purple { color: var(--purple); }
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    position: relative;
+  }
+  .chart-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--sub);
+    margin-bottom: 20px;
+  }
+  canvas { max-height: 280px; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(34,34,58,0.5);
+    font-size: 13px;
+  }
+  tr:last-child td { border-bottom: none; }
+  .table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .badge-buy { background: rgba(74,222,128,0.08); color: var(--accent2); border: 1px solid rgba(74,222,128,0.3); }
+  .badge-hold { background: rgba(251,191,36,0.08); color: var(--accent); border: 1px solid rgba(251,191,36,0.3); }
+  .badge-risk { background: rgba(248,113,113,0.08); color: var(--red); border: 1px solid rgba(248,113,113,0.3); }
+  .swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .swot-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+  .swot-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .swot-box ul { padding-left: 16px; }
+  .swot-box li { margin-bottom: 6px; font-size: 13px; color: var(--sub); }
+  .risk-bar { background: #0a0a0a; border-radius: 2px; height: 6px; margin-top: 8px; }
+  .risk-fill { height: 6px; border-radius: 2px; }
+  .waterfall-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .wb-label { font-size: 12px; color: var(--sub); width: 200px; flex-shrink: 0; }
+  .wb-bar-wrap { flex: 1; background: #0a0a0a; border-radius: 2px; height: 20px; position: relative; }
+  .wb-fill { height: 20px; border-radius: 2px; display: flex; align-items: center; padding-left: 8px; }
+  .wb-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text); }
+  .insight-box {
+    background: #000000;
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .insight-box p { font-size: 13px; color: var(--sub); line-height: 1.7; }
+  .footer {
+    background: #000000;
+    border-top: 1px solid var(--border);
+    padding: 24px 60px;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    background: #000000;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  @media (max-width: 900px) {
+    .main { padding: 24px 20px; }
+    .header { padding: 32px 20px 24px; }
+    .nav { padding: 0 20px; }
+    .header h1 { font-size: 36px; }
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+    .swot-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    .verdict-banner { flex-wrap: wrap; }
+    .wb-label { width: 120px; }
+  }
+</style>
+</head>
+<body>
+<div style="background:#000000; min-height:100vh; width:100%;">
+
+<!-- HEADER -->
+<div class="header" style="background:#000000;">
+  <div class="header-meta">CFA Switzerland (SIG) - Payments Research · TWINT AG (Private) · July 2026</div>
+  <h1>TWINT <span>AG</span></h1>
+  <div class="header-sub">Fundamental &amp; Strategic Analysis · A2A Payment Scheme · Adapted Coverage Format (Unlisted Entity)</div>
+  <div class="header-sub">By: José Saúl Barrientos Rivera</div>
+  <div style="margin-top: 28px; display: flex; gap: 20px; flex-wrap: wrap; align-items: center;">
+    <div class="verdict-banner">
+      <div class="price-box">
+        <div class="verdict-label">Entity Status</div>
+        <div class="verdict-value" style="color: var(--text); font-size:18px;">Private AG</div>
+      </div>
+      <div class="verdict-divider"></div>
+      <div class="price-box">
+        <div class="verdict-label">Economic Moat</div>
+        <div class="verdict-value" style="font-size:18px;">WIDE</div>
+      </div>
+      <div class="verdict-divider"></div>
+      <div class="price-box">
+        <div class="verdict-label">Growth Phase</div>
+        <div class="verdict-value" style="color: var(--blue); font-size:18px;">Maturing S-Curve</div>
+      </div>
+      <div class="verdict-divider"></div>
+      <div class="price-box">
+        <div class="verdict-label">Strategic Value</div>
+        <div class="verdict-value" style="color: var(--accent2); font-size:18px;">Critical Infra</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav" style="background:#000000;">
+  <a href="#overview" class="active">Overview</a>
+  <a href="#growth">Growth</a>
+  <a href="#moat">Moat</a>
+  <a href="#mix">Transaction Mix</a>
+  <a href="#economics">Economics</a>
+  <a href="#competitive">Competitive</a>
+  <a href="#pipeline">Pipeline 2026</a>
+  <a href="#risks">Risks</a>
+  <a href="#swot">SWOT</a>
+  <a href="#verdict">Verdict</a>
+</nav>
+
+<div class="main" style="background:#000000;">
+
+  <!-- ===== 01 EXECUTIVE SUMMARY ===== -->
+  <div class="section" style="background:#000000;" id="overview">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Executive Summary</span>
+    </div>
+
+    <div class="grid-4" style="margin-bottom: 20px;">
+      <div class="card">
+        <div class="card-title">Transactions 2025</div>
+        <div class="card-value" style="font-size:22px;">901M</div>
+        <div class="card-delta green">+17% YoY</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Active Users</div>
+        <div class="card-value" style="font-size:22px;">6M+</div>
+        <div class="card-delta" style="color:var(--sub);">~2 of 3 Swiss residents</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Brand Awareness</div>
+        <div class="card-value" style="font-size:22px;">99%</div>
+        <div class="card-delta" style="color:var(--sub);">Population 16+</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Merchant Acceptance</div>
+        <div class="card-value" style="font-size:22px;">81/86%</div>
+        <div class="card-delta" style="color:var(--sub);">In-store / online</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Business Description</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">
+          TWINT AG (founded September 2016, HQ Zurich &amp; Bern, ~250 employees) operates Switzerland's
+          dominant mobile payment scheme. Unlike card-based wallets (Apple Pay, Google Pay), TWINT is an
+          <strong style="color:var(--text);">account-to-account (A2A) system</strong>: transactions settle
+          directly against Swiss bank accounts, bypassing international card rails and their interchange
+          economics. Use cases span POS checkout, e-commerce, P2P transfers, QR-bill payments, parking,
+          public transport, donations and club fees.
+        </p>
+      </div>
+      <div class="card">
+        <div class="card-title">Ownership Structure</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">
+          Owned by a consortium of Switzerland's systemically central financial institutions:
+          <strong style="color:var(--text);">UBS, Zürcher Kantonalbank, Raiffeisen, PostFinance,
+          Banque Cantonale Vaudoise</strong>, plus market-infrastructure operators
+          <strong style="color:var(--text);">SIX</strong> and <strong style="color:var(--text);">Worldline</strong>.
+          This shareholder base is simultaneously the moat's foundation (native bank-account integration)
+          and a governance constraint (seven strategic owners, no external equity story).
+        </p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Core thesis:</strong> TWINT is quasi-monopolistic national
+      payment infrastructure with an exceptional two-sided network moat, entering the maturity phase of its
+      S-curve. Its value is strategic — sovereignty, data, customer lock-in for its bank owners — rather
+      than a standalone financial equity story. No financials are disclosed; volume and penetration KPIs
+      are the only public fundamentals, which this report treats as the primary analytical dataset.</p>
+    </div>
+  </div>
+
+  <!-- ===== 02 GROWTH ===== -->
+  <div class="section" style="background:#000000;" id="growth">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Transaction Growth — The S-Curve</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-wrap">
+        <div class="chart-title">Annual Transactions 2017–2025 (millions)</div>
+        <canvas id="txChart"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">YoY Growth Rate (%) — Decelerating by Design</div>
+        <canvas id="growthChart"></canvas>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top:20px;">
+      <div class="card">
+        <div class="card-title">2017 → 2025 Multiple</div>
+        <div class="card-value" style="font-size:22px;">≈225×</div>
+        <div class="card-delta" style="color:var(--sub);">4M → 901M transactions</div>
+      </div>
+      <div class="card">
+        <div class="card-title">CAGR 2017–2025</div>
+        <div class="card-value" style="font-size:22px;">≈97%</div>
+        <div class="card-delta" style="color:var(--sub);">8-year compounded</div>
+      </div>
+      <div class="card">
+        <div class="card-title">2026E Milestone</div>
+        <div class="card-value" style="font-size:22px;">1B+</div>
+        <div class="card-delta amber">If ~+11% YoY sustained</div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Read-through:</strong> Growth deceleration (+31% in 2024 →
+      +17% in 2025) is not weakness — it is arithmetic. With two-thirds of the population already active,
+      user acquisition is exhausted as a growth driver. The marginal growth vector shifts to
+      <strong style="color:var(--text);">frequency per user and new payment verticals</strong> (recurring
+      payments, invoicing). This is the classic transition from land-grab to monetization phase.</p>
+    </div>
+  </div>
+
+  <!-- ===== 03 MOAT ===== -->
+  <div class="section" style="background:#000000;" id="moat">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Economic Moat Analysis — Value Investing Lens</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-wrap">
+        <div class="chart-title">Moat Scorecard (0–10) vs. Card Wallets in CH</div>
+        <canvas id="moatRadar"></canvas>
+      </div>
+      <div>
+        <div class="table-wrap">
+          <table>
+            <tr><th>Moat Source</th><th>Assessment</th><th>Rating</th></tr>
+            <tr>
+              <td>Two-sided network effect</td>
+              <td style="color:var(--sub);">6M+ users × 81–86% merchant acceptance</td>
+              <td><span class="badge badge-buy">WIDE</span></td>
+            </tr>
+            <tr>
+              <td>Bank-ownership integration</td>
+              <td style="color:var(--sub);">Native A2A access no foreign wallet can replicate without owner cooperation</td>
+              <td><span class="badge badge-buy">WIDE</span></td>
+            </tr>
+            <tr>
+              <td>Brand / habit</td>
+              <td style="color:var(--sub);">99% awareness; "twinten" is a registered verb</td>
+              <td><span class="badge badge-buy">WIDE</span></td>
+            </tr>
+            <tr>
+              <td>Sovereignty tailwind</td>
+              <td style="color:var(--sub);">Political preference for non-Big-Tech, non-US payment rails</td>
+              <td><span class="badge badge-hold">EMERGING</span></td>
+            </tr>
+            <tr>
+              <td>Switching costs</td>
+              <td style="color:var(--sub);">Moderate — app-level lock-in, but accounts portable</td>
+              <td><span class="badge badge-hold">NARROW</span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Comparative frame:</strong> TWINT belongs to the family of
+      domestic A2A champions — Bizum (Spain), Pix (Brazil), Swish (Sweden), iDEAL (Netherlands). The common
+      pattern: bank-consortium ownership, near-universal domestic penetration, thin standalone economics,
+      enormous strategic value. Buffett's test — "could a competitor with unlimited capital displace this?" —
+      is answered clearly: not without the cooperation of the very banks that own it.</p>
+    </div>
+  </div>
+
+  <!-- ===== 04 TRANSACTION MIX ===== -->
+  <div class="section" style="background:#000000;" id="mix">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Transaction Mix &amp; Usage KPIs</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="chart-wrap">
+        <div class="chart-title">Transaction Split 2025 — Commercial vs. P2P</div>
+        <canvas id="mixChart"></canvas>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Commercial Channel Split — Proximity vs. Remote</div>
+        <canvas id="channelChart"></canvas>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;" class="card">
+      <div class="card-title">Structural Reading of the Mix</div>
+      <div class="waterfall-bar" style="margin-top:16px;">
+        <div class="wb-label">Commercial transactions</div>
+        <div class="wb-bar-wrap"><div class="wb-fill" style="width:77%; background:rgba(251,191,36,0.45); border:1px solid #fbbf24;"><span class="wb-val">77%</span></div></div>
+      </div>
+      <div class="waterfall-bar">
+        <div class="wb-label">P2P transfers</div>
+        <div class="wb-bar-wrap"><div class="wb-fill" style="width:23%; background:rgba(96,165,250,0.45); border:1px solid #60a5fa;"><span class="wb-val">23%</span></div></div>
+      </div>
+      <div class="waterfall-bar">
+        <div class="wb-label">In-store acceptance</div>
+        <div class="wb-bar-wrap"><div class="wb-fill" style="width:81%; background:rgba(74,222,128,0.45); border:1px solid #4ade80;"><span class="wb-val">81%</span></div></div>
+      </div>
+      <div class="waterfall-bar">
+        <div class="wb-label">Online-shop acceptance</div>
+        <div class="wb-bar-wrap"><div class="wb-fill" style="width:86%; background:rgba(167,139,250,0.45); border:1px solid #a78bfa;"><span class="wb-val">86%</span></div></div>
+      </div>
+      <p style="font-size:13px; color:var(--sub); line-height:1.7; margin-top:16px;">
+        P2P (free) functions as the habit-forming loss leader; merchant fees on the 77% commercial share carry
+        the monetization load. Beyond retail: ~77M transactions in mobility/public transport (2024) and 40,000+
+        clubs and non-profits collecting dues and donations — evidence of penetration into long-tail payment
+        niches where card infrastructure was never economical.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== 05 ECONOMICS ===== -->
+  <div class="section" style="background:#000000;" id="economics">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Monetization &amp; Economics (Qualitative)</span>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Revenue Model</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">Merchant transaction fees (commercial),
+        value-added services (vouchers, Super Deals, insurance distribution, subscription comparison),
+        and scheme fees to issuing banks. P2P is free — a customer-acquisition cost borne by design.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Disclosure Policy</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">No revenue, CHF volume, or profitability
+        figures are published. The company reports transaction counts and penetration only. Deliberate opacity
+        is itself a signal: domestic A2A schemes typically run near break-even by owner design.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">Owner Economics</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">The true P&amp;L sits with the shareholders:
+        avoided interchange leakage to Visa/Mastercard, retained customer relationships, transaction data,
+        and defensive positioning against Big-Tech wallets. TWINT is a cost-of-sovereignty investment.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Value-investor caveat:</strong> With no financial statements,
+      no margin of safety can be computed and no intrinsic value estimated. The disciplined position is to
+      classify TWINT as unanalyzable as an investment but highly analyzable as infrastructure — which is
+      precisely how its owners treat it.</p>
+    </div>
+  </div>
+
+  <!-- ===== 06 COMPETITIVE ===== -->
+  <div class="section" style="background:#000000;" id="competitive">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Competitive Landscape</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <tr><th>Player</th><th>Model</th><th>CH Position vs. TWINT</th><th>Threat Level</th></tr>
+        <tr>
+          <td>Apple Pay / Google Pay</td>
+          <td style="color:var(--sub);">Card tokenization (NFC)</td>
+          <td style="color:var(--sub);">Strong at contactless POS; no P2P, no QR-bill, no A2A economics</td>
+          <td><span class="badge badge-hold">MODERATE</span></td>
+        </tr>
+        <tr>
+          <td>Debit/credit cards</td>
+          <td style="color:var(--sub);">Card rails</td>
+          <td style="color:var(--sub);">Still dominant by CHF value at POS; TWINT wins on frequency &amp; niches</td>
+          <td><span class="badge badge-hold">MODERATE</span></td>
+        </tr>
+        <tr>
+          <td>Revolut / neobanks</td>
+          <td style="color:var(--sub);">Foreign e-money wallets</td>
+          <td style="color:var(--sub);">P2P competition among younger users; no Swiss merchant network</td>
+          <td><span class="badge badge-hold">LOW–MOD</span></td>
+        </tr>
+        <tr>
+          <td>Wero (EPI, EU)</td>
+          <td style="color:var(--sub);">European A2A wallet</td>
+          <td style="color:var(--sub);">Potential long-term interoperability question, not a domestic threat</td>
+          <td><span class="badge badge-buy">LOW</span></td>
+        </tr>
+        <tr>
+          <td>Cash</td>
+          <td style="color:var(--sub);">Physical</td>
+          <td style="color:var(--sub);">Still the real competitor in small-value proximity payments</td>
+          <td><span class="badge badge-hold">STRUCTURAL</span></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Sovereignty as sales vehicle:</strong> The intensifying European
+      debate on payment sovereignty — independence from US Big Tech and card schemes — has become a potent
+      commercial argument for TWINT. What began as a defensive bank consortium is now positioned as national
+      critical infrastructure, a framing that hardens the moat politically as well as commercially.</p>
+    </div>
+  </div>
+
+  <!-- ===== 07 PIPELINE ===== -->
+  <div class="section" style="background:#000000;" id="pipeline">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Strategic Pipeline 2026</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">TWINT Rechnung</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">Paperless alternative to the Swiss
+        QR-Rechnung. Moves TWINT from point-of-sale payments into <strong style="color:var(--text);">bill
+        presentment and invoicing</strong> — higher ticket sizes, business-critical flows, deeper merchant
+        integration.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">TWINT Direktlastschrift</div>
+        <p style="font-size:13px; color:var(--sub); line-height:1.7;">Modern direct-debit replacement for
+        <strong style="color:var(--text);">recurring payments</strong> — subscriptions, rent, insurance
+        premiums. Recurring flows are the highest-stickiness segment in payments; capturing them converts
+        episodic usage into contractual usage.</p>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Strategic direction:</strong> Both launches attack the same
+      frontier — shifting from ~900M small, episodic transactions toward recurring, higher-value payment
+      relationships. If executed, the 2026–2028 story is not user growth but revenue-per-transaction and
+      lock-in depth. This is where a data/analytics function earns its keep: pricing, fraud, churn and
+      merchant-portfolio analytics all scale in importance with recurring flows.</p>
+    </div>
+  </div>
+
+  <!-- ===== 08 RISKS ===== -->
+  <div class="section" style="background:#000000;" id="risks">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">Risk Matrix</span>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Market Saturation</div>
+        <p style="font-size:13px; color:var(--sub);">Two-thirds penetration of a ~9M market: user growth is over. All future growth must come from frequency and verticals.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:75%; background:#f87171;"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Governance Complexity</div>
+        <p style="font-size:13px; color:var(--sub);">Seven strategic shareholders with partially divergent interests (banks vs. SIX vs. Worldline); slower capital-allocation decisions than a single-owner fintech.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:60%; background:#fbbf24;"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Big-Tech Wallet Pressure</div>
+        <p style="font-size:13px; color:var(--sub);">NFC-based wallets keep winning contactless share among younger, card-first users; TWINT's QR flow is one step slower at POS.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:55%; background:#fbbf24;"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fraud &amp; Security Perception</div>
+        <p style="font-size:13px; color:var(--sub);">Phishing campaigns targeting the brand; a single high-profile security incident could dent the trust that underpins 99% awareness.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:50%; background:#fbbf24;"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Financial Opacity</div>
+        <p style="font-size:13px; color:var(--sub);">No disclosed economics — profitability, unit costs and pricing power cannot be externally verified.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:45%; background:#60a5fa;"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">European Interoperability</div>
+        <p style="font-size:13px; color:var(--sub);">Wero/EPI evolution could eventually pressure a Swiss-only scheme on cross-border use cases.</p>
+        <div class="risk-bar"><div class="risk-fill" style="width:35%; background:#4ade80;"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 09 SWOT ===== -->
+  <div class="section" style="background:#000000;" id="swot">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <span class="section-title">SWOT Analysis</span>
+    </div>
+
+    <div class="swot-grid">
+      <div class="swot-box" style="border-top: 2px solid var(--accent2);">
+        <div class="swot-label" style="color:var(--accent2);">Strengths</div>
+        <ul>
+          <li>Wide two-sided network moat: 6M+ users, 81–86% merchant acceptance</li>
+          <li>99% brand awareness; verb-status brand ("twinten")</li>
+          <li>Native A2A bank integration via shareholder consortium</li>
+          <li>225× transaction growth in 8 years; ~97% CAGR</li>
+          <li>Long-tail niches (clubs, donations, mobility) uncontested</li>
+        </ul>
+      </div>
+      <div class="swot-box" style="border-top: 2px solid var(--red);">
+        <div class="swot-label" style="color:var(--red);">Weaknesses</div>
+        <ul>
+          <li>Swiss-only addressable market (~9M people)</li>
+          <li>User acquisition exhausted; growth now frequency-dependent</li>
+          <li>No disclosed financials; presumed thin standalone economics</li>
+          <li>QR flow slower than NFC tap at physical POS</li>
+          <li>Multi-owner governance slows strategic pivots</li>
+        </ul>
+      </div>
+      <div class="swot-box" style="border-top: 2px solid var(--blue);">
+        <div class="swot-label" style="color:var(--blue);">Opportunities</div>
+        <ul>
+          <li>Recurring payments (Direktlastschrift) — stickiest segment in payments</li>
+          <li>Bill presentment (TWINT Rechnung) — higher ticket sizes</li>
+          <li>Payment-sovereignty politics as a structural tailwind</li>
+          <li>Value-added services monetization (deals, vouchers, insurance)</li>
+          <li>1B-transaction milestone in 2026 as brand catalyst</li>
+        </ul>
+      </div>
+      <div class="swot-box" style="border-top: 2px solid var(--accent);">
+        <div class="swot-label" style="color:var(--accent);">Threats</div>
+        <ul>
+          <li>Big-Tech wallets capturing card-first younger cohorts</li>
+          <li>Brand-targeted phishing / fraud incidents</li>
+          <li>European A2A consolidation (Wero) marginalizing national schemes long-term</li>
+          <li>Shareholder strategy divergence</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 10 VERDICT ===== -->
+  <div class="section" style="background:#000000;" id="verdict">
+    <div class="section-header">
+      <span class="section-num">10</span>
+      <span class="section-title">Analytical Verdict</span>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:20px;">
+      <div class="card" style="text-align:center; border-top: 2px solid var(--accent2);">
+        <div class="card-title">As Infrastructure</div>
+        <div class="card-value" style="font-size:20px; color:var(--accent2);">EXCEPTIONAL</div>
+        <div class="card-delta" style="color:var(--sub);">Quasi-monopoly, wide moat</div>
+      </div>
+      <div class="card" style="text-align:center; border-top: 2px solid var(--accent);">
+        <div class="card-title">As Standalone Equity</div>
+        <div class="card-value" style="font-size:20px; color:var(--accent);">NOT INVESTABLE</div>
+        <div class="card-delta" style="color:var(--sub);">Private, opaque, strategic asset</div>
+      </div>
+      <div class="card" style="text-align:center; border-top: 2px solid var(--blue);">
+        <div class="card-title">Indirect Exposure</div>
+        <div class="card-value" style="font-size:20px; color:var(--blue);">VIA OWNERS</div>
+        <div class="card-delta" style="color:var(--sub);">UBS · SIX · Worldline et al.</div>
+      </div>
+    </div>
+
+    <div class="insight-box">
+      <p><strong style="color:var(--accent);">Bottom line:</strong> TWINT passes every qualitative test a
+      value investor applies to a franchise — durable moat, habitual product, pricing latitude, political
+      protection — while failing the one quantitative test that matters: there is nothing to buy and nothing
+      to price. Its correct classification is national payment infrastructure whose returns accrue to its
+      bank owners as strategic option value. The 2026 pivot toward recurring payments is the KPI to watch:
+      it determines whether TWINT matures into a monetization machine or remains a magnificent, break-even
+      public utility in private clothing.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer" style="background:#000000;">
+  CFA SWITZERLAND (SIG) — BY JOSÉ SAÚL BARRIENTOS RIVERA · JULY 2026 · SOURCES: TWINT AG COMMUNICATIONS, AWP/SRF/COMPUTERWORLD REPORTING (FEB 2026)<br>
+  THIS DOCUMENT IS FOR EDUCATIONAL AND RESEARCH PURPOSES ONLY AND DOES NOT CONSTITUTE INVESTMENT ADVICE. TWINT AG IS A PRIVATE COMPANY; NO SECURITIES ARE AVAILABLE TO PUBLIC INVESTORS.
+</div>
+
+<script>
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = '#22223a';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+
+// 02 — Transactions bar
+new Chart(document.getElementById('txChart'), {
+  type: 'bar',
+  data: {
+    labels: ['2017','2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [{
+      label: 'Transactions (M)',
+      data: [4, 11, 37, 104, 215, 386, 590, 773, 901],
+      backgroundColor: 'rgba(251,191,36,0.85)',
+      borderColor: '#fbbf24',
+      borderWidth: 1,
+      borderRadius: 2,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: '#14141f' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 02 — Growth rate line
+new Chart(document.getElementById('growthChart'), {
+  type: 'line',
+  data: {
+    labels: ['2018','2019','2020','2021','2022','2023','2024','2025'],
+    datasets: [{
+      label: 'YoY %',
+      data: [175, 236, 181, 107, 80, 53, 31, 17],
+      borderColor: '#60a5fa',
+      backgroundColor: 'rgba(96,165,250,0.2)',
+      fill: true,
+      tension: 0.35,
+      pointBackgroundColor: '#60a5fa',
+      pointRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: '#14141f' }, ticks: { callback: v => v + '%' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// 03 — Moat radar
+new Chart(document.getElementById('moatRadar'), {
+  type: 'radar',
+  data: {
+    labels: ['Network Effect','Bank Integration','Brand/Habit','Political Moat','Switching Costs','Merchant Coverage','P2P Dominance','Data Advantage'],
+    datasets: [
+      {
+        label: 'TWINT',
+        data: [9.5, 10, 9.5, 7.5, 6, 8.5, 9.5, 8],
+        backgroundColor: 'rgba(251,191,36,0.08)',
+        borderColor: '#fbbf24',
+        pointBackgroundColor: '#fbbf24',
+        pointRadius: 4,
+      },
+      {
+        label: 'Card Wallets (Apple/Google Pay in CH)',
+        data: [7, 3, 8, 2, 7, 8, 1, 5],
+        backgroundColor: 'rgba(96,165,250,0.05)',
+        borderColor: 'rgba(96,165,250,0.5)',
+        pointBackgroundColor: '#60a5fa',
+        pointRadius: 3,
+        borderDash: [4, 4],
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: '#94a3b8', boxWidth: 10 } } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        grid: { color: '#22223a' },
+        angleLines: { color: '#22223a' },
+        ticks: { display: false },
+        pointLabels: { color: '#94a3b8', font: { size: 10 } }
+      }
+    }
+  }
+});
+
+// 04 — Mix doughnut
+new Chart(document.getElementById('mixChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Commercial (77%)', 'P2P (23%)'],
+    datasets: [{
+      data: [77, 23],
+      backgroundColor: ['rgba(251,191,36,0.9)', 'rgba(96,165,250,0.9)'],
+      borderColor: '#000000',
+      borderWidth: 3,
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '65%',
+    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10 } } }
+  }
+});
+
+// 04 — Channel doughnut
+new Chart(document.getElementById('channelChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Proximity / POS (~65%)', 'Remote / E-commerce (~35%)'],
+    datasets: [{
+      data: [65, 35],
+      backgroundColor: ['rgba(74,222,128,0.9)', 'rgba(167,139,250,0.9)'],
+      borderColor: '#000000',
+      borderWidth: 3,
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '65%',
+    plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', boxWidth: 10 } } }
+  }
+});
+
+// Nav
+document.querySelectorAll('.nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+    e.target.classList.add('active');
+  });
+});
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  navLinks.forEach(l => {
+    l.classList.remove('active');
+    if (l.getAttribute('href') === '#' + current) l.classList.add('active');
+  });
+});
+</script>
+
+</div>
+</body>
+</html>
