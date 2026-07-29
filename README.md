@@ -8,7 +8,7 @@ An interactive, browser-based research report on **TWINT AG**, Switzerland’s l
 
 After enabling GitHub Pages, the report will be available at:
 
-`https://<your-github-username>.github.io/twint-analysis/`
+`https://SaulBars19.github.io/twint-analysis/`
 
 ## Executive takeaway
 
@@ -73,7 +73,7 @@ No build process, framework or backend is required.
 
 ```text
 twint-analysis/
-├── index.html            # Complete interactive report
+├── twint_SIG_JSBR.html   # Complete interactive report
 ├── README.md             # Project overview and documentation
 ├── PUBLISH_FROM_VSC.md   # Step-by-step publishing guide
 ├── LICENSE.md            # Usage and copyright terms
@@ -84,7 +84,7 @@ twint-analysis/
 
 ### Simplest option
 
-Open `index.html` directly in a web browser.
+Open `twint_SIG_JSBR.html` directly in a web browser.
 
 ### Recommended option in VS Code
 
@@ -104,7 +104,7 @@ The page will normally open at a local address such as `http://127.0.0.1:5500`.
 5. Choose the `main` branch and the `/ (root)` folder.
 6. Save the configuration.
 
-GitHub will then publish `index.html` as the project homepage.
+GitHub will then publish `twint_SIG_JSBR.html` as the project homepage.
 
 Detailed commands are included in [`PUBLISH_FROM_VSC.md`](PUBLISH_FROM_VSC.md).
 
@@ -128,7 +128,9 @@ All trademarks, company names and product names belong to their respective owner
 ## Author
 
 **José Saúl Barrientos Rivera**  
-Economics, finance and applied data-science research
+MA in Economics and Management with Applied Data Science Specialization
+University of Luzern
+CFA Level 1 Candidate (Feb 2027)
 
 ---
 
