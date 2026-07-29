@@ -1,75 +1,93 @@
-# Cómo publicar este análisis desde VS Code
+# How to Publish This Analysis from VS Code
 
-## 1. Prepara Git
+## 1. Set Up Git
 
-Abre la carpeta del proyecto en VS Code y luego abre una terminal integrada:
+Open the project folder in VS Code and launch the integrated terminal:
 
 ```bash
 git --version
 ```
 
-Si Git está instalado, verás su número de versión.
+If Git is installed correctly, you'll see the installed version.
 
-Configura tu identidad únicamente si todavía no lo has hecho:
+Configure your identity only if you haven't done it before:
 
 ```bash
 git config --global user.name "Saul Barrientos"
-git config --global user.email "TU_EMAIL_DE_GITHUB"
+git config --global user.email "YOUR_GITHUB_EMAIL"
 ```
 
-## 2. Crea el repositorio en GitHub
+---
 
-En GitHub:
+## 2. Create the GitHub Repository
 
-1. Haz clic en **New repository**.
-2. Usa un nombre como `twint-analysis`.
-3. Añade una descripción, por ejemplo:
-   `Interactive fundamental and strategic analysis of TWINT AG.`
-4. Selecciona **Public**.
-5. No añadas README, licencia ni `.gitignore`, porque ya están incluidos aquí.
-6. Crea el repositorio.
+On GitHub:
 
-## 3. Sube el proyecto desde VS Code
+1. Click **New repository**.
 
-Desde la terminal integrada, dentro de esta carpeta:
+2. Name it something like `twint-analysis`.
+
+3. Add a short description, for example:
+
+   ```
+   Interactive fundamental and strategic analysis of TWINT AG.
+   ```
+
+4. Choose **Public**.
+
+5. **Do not** initialize the repository with a README, license, or `.gitignore`, as these files are already included.
+
+6. Click **Create repository**.
+
+---
+
+## 3. Upload the Project from VS Code
+
+Inside the integrated terminal, while located in the project folder, run:
 
 ```bash
 git init
 git add .
 git commit -m "Publish TWINT fundamental and strategic analysis"
 git branch -M main
-git remote add origin https://github.com/TU_USUARIO/twint-analysis.git
+git remote add origin https://github.com/YOUR_USERNAME/twint-analysis.git
 git push -u origin main
 ```
 
-Sustituye `TU_USUARIO` por tu nombre de usuario real de GitHub.
+Replace `YOUR_USERNAME` with your actual GitHub username.
 
-## 4. Activa GitHub Pages
+---
 
-En tu repositorio de GitHub:
+## 4. Enable GitHub Pages
 
-1. Abre **Settings**.
-2. Entra en **Pages**.
-3. En **Build and deployment**, selecciona **Deploy from a branch**.
-4. Selecciona la rama `main`.
-5. Selecciona la carpeta `/ (root)`.
-6. Guarda los cambios.
+In your GitHub repository:
 
-La dirección tendrá normalmente esta estructura:
+1. Open **Settings**.
+2. Go to **Pages**.
+3. Under **Build and deployment**, choose **Deploy from a branch**.
+4. Select the **main** branch.
+5. Select the **/ (root)** folder.
+6. Click **Save**.
+
+Your website will usually be available at:
 
 ```text
-https://TU_USUARIO.github.io/twint-analysis/
+https://YOUR_USERNAME.github.io/twint-analysis/
 ```
 
-## 5. Actualiza el enlace del README
+---
 
-En `README.md`, reemplaza:
+## 5. Update the README
+
+In `README.md`, replace:
 
 ```text
 https://<your-github-username>.github.io/twint-analysis/
 ```
 
-por tu URL real. Después ejecuta:
+with your actual GitHub Pages URL.
+
+Then commit the change:
 
 ```bash
 git add README.md
@@ -77,46 +95,65 @@ git commit -m "Add live GitHub Pages link"
 git push
 ```
 
-## 6. Cómo subir cambios futuros
+---
 
-Cada vez que edites el análisis:
+## 6. Publishing Future Updates
+
+Whenever you modify the analysis:
 
 ```bash
 git add .
-git commit -m "Describe brevemente el cambio"
+git commit -m "Briefly describe your changes"
 git push
 ```
 
-GitHub Pages volverá a publicar automáticamente la versión actualizada.
+GitHub Pages will automatically redeploy the updated version.
 
-## Recomendaciones para que el repositorio se vea profesional
+---
 
-- Añade una captura del dashboard al README cuando tengas la URL definitiva.
-- Usa una descripción corta y clara en la sección **About** del repositorio.
-- Añade temas como `finance`, `fintech`, `payments`, `twint`, `data-analysis`, `equity-research` y `chartjs`.
-- Fija el repositorio en tu perfil de GitHub.
-- Comparte directamente la URL de GitHub Pages en CV, LinkedIn y candidaturas.
+# Best Practices for a Professional Repository
 
-## Problemas frecuentes
+* Add a screenshot of the dashboard to the README once the live website is available.
+* Write a concise and informative description in the repository's **About** section.
+* Add relevant topics such as:
 
-### La página aparece en blanco
+  * `finance`
+  * `fintech`
+  * `payments`
+  * `twint`
+  * `data-analysis`
+  * `equity-research`
+  * `chartjs`
+* Pin the repository to your GitHub profile.
+* Share the GitHub Pages URL on your CV, LinkedIn profile, and job applications.
 
-Comprueba que el archivo principal se llama exactamente `index.html` y está en la raíz del repositorio.
+---
 
-### Los gráficos no aparecen
+# Troubleshooting
 
-El informe carga Chart.js desde internet. Verifica que el navegador tenga conexión y que ninguna extensión esté bloqueando el CDN.
+### The website shows a blank page
 
-### Git rechaza el push
+Make sure the main file is named **`index.html`** and is located in the root directory of the repository.
 
-Verifica que la URL remota sea correcta:
+---
+
+### Charts are not displayed
+
+The dashboard loads **Chart.js** from a CDN. Verify that your browser has an internet connection and that no browser extension or firewall is blocking external scripts.
+
+---
+
+### Git rejects the push
+
+Check that your remote repository URL is correct:
 
 ```bash
 git remote -v
 ```
 
-Para corregirla:
+To update it:
 
 ```bash
-git remote set-url origin https://github.com/TU_USUARIO/twint-analysis.git
+git remote set-url origin https://github.com/YOUR_USERNAME/twint-analysis.git
 ```
+
